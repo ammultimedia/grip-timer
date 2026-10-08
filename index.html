@@ -178,12 +178,6 @@
       <svg class="chev" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
     </summary>
     <div class="setbody">
-    <div class="sethead">Targets</div>
-    <div class="targets">
-      <label>Yellow<input id="in0" type="number" inputmode="numeric" min="1" max="999"></label>
-      <label>Orange<input id="in1" type="number" inputmode="numeric" min="1" max="999"></label>
-      <label>Green<input id="in2" type="number" inputmode="numeric" min="1" max="999"></label>
-    </div>
     <label class="tickrow"><input type="checkbox" id="tickBox"> Pace tick: one quiet tick per grip needed</label>
     <label class="tickrow">Tick volume
       <select id="tickVol"><option value="0">Low</option><option value="1">Medium</option><option value="2">High</option></select>
@@ -235,6 +229,7 @@
   }
   function save() { try { localStorage.setItem('gripTimer.v1', JSON.stringify(S)); } catch (e) {} }
   load();
+  S.targets = [40, 50, 60];
 
   var $ = function (id) { return document.getElementById(id); };
   var circ = 2 * Math.PI * 45;
@@ -243,7 +238,6 @@
   function renderTargets() {
     for (var i = 0; i < 3; i++) {
       $('tg' + i).textContent = S.targets[i];
-      $('in' + i).value = S.targets[i];
     }
   }
   var COLS = ['#FFD400', '#FF8A00', '#2FBF4F'], NAMES = ['Yellow', 'Orange', 'Green'];
@@ -542,13 +536,6 @@
   $('plus').addEventListener('click', function () { setReps(reps + 1); });
   $('minus').addEventListener('click', function () { setReps(reps - 1); });
   $('saveBtn').addEventListener('click', saveAndReset);
-  [0, 1, 2].forEach(function (i) {
-    $('in' + i).addEventListener('change', function () {
-      var v = parseInt($('in' + i).value, 10);
-      if (v > 0 && v < 1000) { S.targets[i] = v; save(); }
-      renderTargets(); renderBest();
-    });
-  });
   function syncTick() {
     $('tickBox').checked = S.tick !== false;
     $('tickQuick').textContent = 'Pace tick: ' + (S.tick !== false ? 'on' : 'off');
